@@ -36,26 +36,38 @@ public class TaskletAdvanceConfiguration {
   private final JobBuilderFactory jobBuilderFactory;
   private final StepBuilderFactory stepBuilderFactory;
 
+  // Tasklet
+  private final UserReader userReader;
+  private final UserProcessor userProcessor;
+  private final UserWriter userWriter;
+
+
   @Bean
   public Job advancedTaskletJob() {
     return jobBuilderFactory.get("advancedTaskletJob")
         .incrementer(new RunIdIncrementer())
-        .start(readCsv())
-        .next(processCsv())
-        .next(printCsv())
+        .start(readUsers())
+        .next(processUsers())
+        .next(writeUsers())
         .build();
   }
 
-  private Step printCsv() {
-    return null;
+  private Step writeUsers() {
+    return stepBuilderFactory.get("writeUsers")
+        .tasklet(userWriter)
+        .build();
   }
 
-  private Step processCsv() {
-    return null;
+  private Step processUsers() {
+    return stepBuilderFactory.get("processUsers")
+        .tasklet(userProcessor)
+        .build();
   }
 
-  private Step readCsv() {
-    return null;
+  private Step readUsers() {
+    return stepBuilderFactory.get("readUsers")
+        .tasklet(userReader)
+        .build();
   }
 
 
