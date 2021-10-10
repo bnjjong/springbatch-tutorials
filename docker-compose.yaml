@@ -1,0 +1,16 @@
+version: '2'
+services:
+  spring_batch_db:
+    container_name: spring_batch_db
+    image: mariadb:10.4
+    restart: always
+    ports:
+      - "33306:3306"
+    volumes:
+      - ~/docker-repo/spring_batch_db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=mariadb
+      - MYSQL_DATABASE=spring_batch
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=1234
+    command: mysqld --character-set-server=utf8mb4
