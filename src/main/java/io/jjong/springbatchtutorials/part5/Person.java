@@ -6,9 +6,14 @@
  * @since 2021/10/07
  */
 
-package io.jjong.springbatchtutorials.part2;
+package io.jjong.springbatchtutorials.part5;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -23,11 +28,15 @@ import lombok.ToString;
  * @see
  * @since 1.0
  */
+@Entity
+@NoArgsConstructor
 @Getter
-@Setter
 @ToString
 public class Person {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
+
   private String name;
   private int age;
   private String address;
@@ -37,5 +46,9 @@ public class Person {
     this.name = name;
     this.age = age;
     this.address = address;
+  }
+
+  public Person(String name, int age, String address) {
+    this(0, name, age, address); //id 는 0으로 해도 자동으로 생성 됨.
   }
 }

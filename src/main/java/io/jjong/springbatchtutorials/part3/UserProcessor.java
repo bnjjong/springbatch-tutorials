@@ -54,7 +54,7 @@ public class UserProcessor implements Tasklet, StepExecutionListener {
   public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext)
       throws Exception {
     users = users.stream().peek(u -> {
-      // calculate age;
+      // calculate age
       LocalDate birth = DateHelper.convertToLocalDateViaInstant(u.getBirthDate());
       LocalDate now = LocalDate.now();
       Period period = Period.between(birth, now);

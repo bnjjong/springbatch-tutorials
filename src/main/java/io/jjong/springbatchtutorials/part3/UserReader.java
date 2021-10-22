@@ -50,7 +50,7 @@ public class UserReader implements Tasklet, StepExecutionListener {
     try {
       log.info(">>>>>>>>>>>>>>>>>>> User reader initialized.");
       log.info(">>>>>>>>>>>>>>>>>>> start to read csv file.");
-      this.reader = new FileReader(FileHelper.getFileFromResource("user.csv"));
+      this.reader = new FileReader(FileHelper.getFileFromResource("part3-user.csv"));
       log.info(">>>>>>>>>>>>>>>>>>> end to read csv file.");
     } catch (FileNotFoundException | FileReadException e) {
       e.printStackTrace();

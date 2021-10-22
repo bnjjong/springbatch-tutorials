@@ -53,7 +53,7 @@ public class UserWriter implements Tasklet, StepExecutionListener {
     log.info(">>>>>>>>>>>>>>>>>>> loading users from context.");
 
     try {
-      this.writer = new CSVWriter(new FileWriter("new-user.csv"));
+      this.writer = new CSVWriter(new FileWriter("new-part3-user.csv"));
     } catch (IOException e) {
       e.printStackTrace();
     }

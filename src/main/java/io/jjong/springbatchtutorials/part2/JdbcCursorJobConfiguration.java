@@ -16,11 +16,12 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.ItemWriter;
+  import org.springframework.batch.item.ItemProcessor;
+  import org.springframework.batch.item.ItemReader;
+  import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
-import org.springframework.context.annotation.Bean;
+  import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
@@ -46,14 +47,14 @@ public class JdbcCursorJobConfiguration {
   private static final int chunkSize = 5;
 
   @Bean
-  public Job jdbcCursorJob() {
+  public Job jdbcCursorJob() throws Exception {
     return jobBuilderFactory.get("jdbcCursorJob")
         .incrementer(new RunIdIncrementer())
         .start(step1())
         .build();
   }
 
-  private Step step1() {
+  private Step step1() throws Exception {
     return stepBuilderFactory.get("jdbcStep1")
         .<Person, Person>chunk(chunkSize)
         .reader(jdbcReader())
@@ -73,18 +74,26 @@ public class JdbcCursorJobConfiguration {
 
     return items -> {
       log.info("writer is called!");
-      items.forEach(System.out::println);
+      items.forEach(person -> log.info("person : {}", person));
     };
   }
 
-  public ItemReader<Person> jdbcReader() {
-    return new JdbcCursorItemReaderBuilder<Person>()
+  public ItemReader<Person> jdbcReader() throws Exception {
+    JdbcCursorItemReader<Person> itemReader = new JdbcCursorItemReaderBuilder<Person>()
+        .name("person reader")
         .fetchSize(chunkSize)
         .dataSource(dataSource)
-        .rowMapper(new BeanPropertyRowMapper<>(Person.class))
-        .sql("select name, age, address from person")
-        .name("person reader")
+        .sql("select id, name, age, address from person")
+//        .rowMapper(new BeanPropertyRowMapper<>(Person.class))
+        .rowMapper((rs, rowNum) -> new Person(
+            rs.getLong(1),
+            rs.getString(2),
+            rs.getInt(3),
+            rs.getString(4)
+        ))
         .build();
+    itemReader.afterPropertiesSet();
+    return itemReader;
   }
 
 

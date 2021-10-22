@@ -36,6 +36,7 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class ConditionJobConfiguration {
 
+
   private final JobBuilderFactory jobBuilderFactory;
   private final StepBuilderFactory stepBuilderFactory;
 

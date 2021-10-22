@@ -1,10 +1,32 @@
 spring:
+  application:
+    name: spring-batch-tutorials
+  profiles:
+    active: local
   batch:
     job:
       names: ${job.name:NONE}
+    jdbc:
+      initialize-schema: embedded # 플랫폼에 맞게 알아서 스키마를 생성 해줌
   datasource:
     hikari:
-      jdbc-url: jdbc:mysql://localhost:33306/spring_batch
+      driver-class-name: org.mariadb.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:33306/spring_batch?autoReconnect=true&characterEncoding=UTF-8&serverTimezone=UTC
       username: user
       password: 1234
-      driver-class-name: com.mysql.jdbc.Driver
+      minimum-idle: 10
+      maximum-pool-size: 50
+      transaction-isolation: TRANSACTION_READ_UNCOMMITTED
+      pool-name: spring-batch-demo
+      validation-query: select 1
+  sql:
+    init:
+      data-locations: classpath:part2-person.sql # 초기화시 실행
+      mode: embedded
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+logging:
+  level:
+    root: info

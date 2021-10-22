@@ -6,7 +6,7 @@
  * @since 2021/10/07
  */
 
-package io.jjong.springbatchtutorials.part2;
+package io.jjong.springbatchtutorials.part7;
 
 import lombok.Getter;
 import lombok.Setter;
