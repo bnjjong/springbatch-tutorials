@@ -1,16 +1,17 @@
-version: '2'
+version: '3'
 services:
-  spring_batch_db:
-    container_name: spring_batch_db
+  spring_batch_example_db:
     image: mariadb:10.4
     restart: always
     ports:
       - "33306:3306"
     volumes:
-      - ~/docker-repo/spring_batch_db:/var/lib/mysql
+      - "./sql/spring-batch/schema-mysql.sql:/docker-entrypoint-initdb.d/1.sql"
+      - "./sql/async-example/schema-mysql.sql:/docker-entrypoint-initdb.d/2.sql"
+      - "./sql/async-example/data-mysql.sql:/docker-entrypoint-initdb.d/3.sql"
     environment:
       - MYSQL_ROOT_PASSWORD=mariadb
-      - MYSQL_DATABASE=spring_batch
+      - MYSQL_DATABASE=spring_batch_example_db
       - MYSQL_USER=user
       - MYSQL_PASSWORD=1234
     command: mysqld --character-set-server=utf8mb4

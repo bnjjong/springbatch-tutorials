@@ -30,9 +30,5 @@ import org.springframework.context.annotation.Configuration;
 @EnableAutoConfiguration
 @EnableBatchProcessing
 public class TestBatchConfiguration {
-//  @Bean
-//  public JobLauncherTestUtils jobLauncherTestUtils() {
-//    return new JobLauncherTestUtils();
-//  }
 
 }

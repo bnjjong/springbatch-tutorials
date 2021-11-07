@@ -12,6 +12,7 @@ import io.jjong.springbatchtutorials.TestBatchConfiguration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -52,7 +53,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  */
 
 @ExtendWith(SpringExtension.class)
-@SpringBatchTest // jobScope 테스트를 하기 위해서 필요 함.
+@SpringBatchTest
 @ContextConfiguration(classes = {ChunkCsvTaskJobConfiguration.class, TestBatchConfiguration.class})
 class ChunkCsvTaskJobConfigurationTest {
 
@@ -71,8 +72,10 @@ class ChunkCsvTaskJobConfigurationTest {
     JobExecution jobExecution = jobLauncherTestUtils.launchJob(jobParameters);
 
     // then
-    assertThat(jobExecution.getStepExecutions().stream()
-        .mapToInt(StepExecution::getWriteCount)
+    assertThat(jobExecution.getStatus()).isEqualTo(BatchStatus.COMPLETED);
+
+    assertThat(jobExecution.getStepExecutions().stream() // step 은 여러개 이므로
+        .mapToInt(StepExecution::getWriteCount) // 추가로 commitCount, readCount 등도 확인 할 수 있다.
         .sum()
     ).isEqualTo(5);
 
